@@ -22,3 +22,9 @@ sudo apt-get install -y cassandra
 
 # Test the installation of Cassandra
 sudo service cassandra start
+
+# Set cluster confgration
+cp /vagrant/cassandra.yaml /etc/cassandra/cassandra.yaml
+export ETCD_HOST_IP=$(ip addr show enp0s8 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
+sudo sed -i "s/ETCD_HOST_IP/${ETCD_HOST_IP}/g" /etc/cassandra/cassandra.yaml
+sudo service cassandra restart
