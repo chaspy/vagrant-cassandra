@@ -23,6 +23,14 @@ sudo apt-get install -y cassandra
 # Test the installation of Cassandra
 sudo service cassandra start
 
+# Open a port
+# TCP port for commands and data.
+sudo iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 7000 -j ACCEPT
+# TCP port for the native transport server. cqlsh, the Cassandra command line utility, will connect to the cluster through this port.
+sudo iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 9042 -j ACCEPT
+# ????
+sudo iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 7199 -j ACCEPT
+
 # Set cluster confgration
 cp /vagrant/cassandra.yaml /etc/cassandra/cassandra.yaml
 export ETCD_HOST_IP=$(ip addr show enp0s8 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
